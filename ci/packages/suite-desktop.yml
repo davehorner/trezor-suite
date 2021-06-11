@@ -12,6 +12,8 @@
     - yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline
     - yarn build:libs
     - yarn workspace @trezor/suite-data copy-static-files
+    # Get Suite App version from the root package.json
+    - export SUITE_VERSION=$(jq -r .version package.json)
     - yarn workspace @trezor/suite-desktop build:${platform}
     - ls -la packages/suite-desktop/build-electron
     - mv packages/suite-desktop/build-electron/* .
@@ -28,6 +30,8 @@
     - nix-shell --run "yarn install --frozen-lockfile --cache-folder .yarn --prefer-offline"
     - nix-shell --run "yarn build:libs"
     - nix-shell --run "yarn workspace @trezor/suite-data copy-static-files"
+    # Get Suite App version from the root package.json
+    - export SUITE_VERSION=$(jq -r .version package.json)
     - nix-shell --run "yarn workspace @trezor/suite-desktop build:${platform}"
     - nix-shell --run "bash packages/suite-desktop/scripts/gnupg-sign.sh"
     - ls -la packages/suite-desktop/build-electron
