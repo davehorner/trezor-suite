@@ -49,6 +49,7 @@ import TroubleshootingTips from './TroubleshootingTips';
 import ConnectDevicePrompt from './ConnectDevicePrompt';
 import Coin, { CoinProps } from './Coin';
 import CoinsGroup from './CoinsGroup';
+import CoinsList from './CoinsGroup/CoinsList';
 
 export {
     Backdrop,
@@ -106,5 +107,6 @@ export {
     ConnectDevicePrompt,
     Coin,
     CoinsGroup,
+    CoinsList,
 };
 export type { ImageProps, ModalProps, CoinProps };
