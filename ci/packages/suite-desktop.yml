@@ -13,6 +13,7 @@
     - yarn build:libs
     - yarn workspace @trezor/suite-data copy-static-files
     # Get Suite App version from the root package.json
+    # The variable is used by the yarn build task.
     - export SUITE_VERSION=$(jq -r .version package.json)
     - yarn workspace @trezor/suite-desktop build:${platform}
     - ls -la packages/suite-desktop/build-electron
