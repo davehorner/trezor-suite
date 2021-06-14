@@ -47,6 +47,8 @@ import CollapsibleBox from './CollapsibleBox';
 import DeviceMatrixExplanation from './DeviceMatrixExplanation';
 import TroubleshootingTips from './TroubleshootingTips';
 import ConnectDevicePrompt from './ConnectDevicePrompt';
+import Coin, { CoinProps } from './Coin';
+import CoinsGroup from './CoinsGroup';
 
 export {
     Backdrop,
@@ -102,5 +104,7 @@ export {
     DeviceMatrixExplanation,
     TroubleshootingTips,
     ConnectDevicePrompt,
+    Coin,
+    CoinsGroup,
 };
-export type { ImageProps, ModalProps };
+export type { ImageProps, ModalProps, CoinProps };
