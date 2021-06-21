@@ -1,7 +1,8 @@
 import React from 'react';
+import styled from 'styled-components';
 import { FIAT } from '@suite-config';
 import { Translation } from '@suite-components';
-import { Select, Input } from '@trezor/components';
+import { Select, Input, Button } from '@trezor/components';
 import { buildOption } from '@wallet-utils/coinmarket/coinmarketUtils';
 import Bignumber from 'bignumber.js';
 import { Controller } from 'react-hook-form';
@@ -14,11 +15,17 @@ import {
     FIAT_CURRENCY_SELECT,
     FIAT_INPUT,
 } from '@suite/types/wallet/coinmarketSellForm';
+import { useLayoutSize } from '@suite-hooks';
 
 interface Props {
     activeInput: typeof FIAT_INPUT | typeof CRYPTO_INPUT;
     setActiveInput: React.Dispatch<React.SetStateAction<typeof FIAT_INPUT | typeof CRYPTO_INPUT>>;
 }
+
+const ClearFormButton = styled(Button)`
+    align-self: center;
+    height: 24px;
+`;
 
 const FiatInput = ({ activeInput, setActiveInput }: Props) => {
     const {
@@ -32,11 +39,28 @@ const FiatInput = ({ activeInput, setActiveInput }: Props) => {
         defaultCurrency,
         quotesRequest,
         onFiatAmountChange,
+        isDraft,
+        handleClearFormButtonClick,
     } = useCoinmarketSellFormContext();
+    const { isDirty } = formState;
+    const { layoutSize } = useLayoutSize();
+    const isLargeLayoutSize = layoutSize === 'XLARGE' || layoutSize === 'LARGE';
 
     return (
         <Input
-            noTopLabel
+            labelAddon={
+                isLargeLayoutSize && (isDirty || isDraft) ? (
+                    <ClearFormButton
+                        type="button"
+                        variant="tertiary"
+                        onClick={handleClearFormButtonClick}
+                    >
+                        <Translation id="TR_CLEAR_ALL" />
+                    </ClearFormButton>
+                ) : undefined
+            }
+            noTopLabel={!isLargeLayoutSize}
+            labelAddonIsVisible
             defaultValue=""
             innerRef={register({
                 validate: (value: string) => {
@@ -128,6 +152,7 @@ const FiatInput = ({ activeInput, setActiveInput }: Props) => {
                             minWidth="45px"
                             isClean
                             hideTextCursor
+                            noTopLabel
                             onChange={(selected: any) => {
                                 onChange(selected);
                                 setAmountLimits(undefined);

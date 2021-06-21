@@ -38,7 +38,6 @@ const RightWrapper = styled.div`
 const MiddleWrapper = styled.div`
     display: flex;
     min-width: 35px;
-    height: 48px;
     align-items: center;
     justify-content: center;
 
@@ -55,6 +54,7 @@ const StyledIcon = styled(Icon)`
 
 const Line = styled.div<{ color: string }>`
     height: 48px;
+    margin-top: 32px;
     border: 1px solid ${props => props.color};
 `;
 
@@ -76,7 +76,6 @@ const Inputs = () => {
         updateFiatValue,
         clearErrors,
     } = useCoinmarketExchangeFormContext();
-
     const tokenAddress = getValues(CRYPTO_TOKEN);
     const tokenData = account.tokens?.find(t => t.address === tokenAddress);
 
@@ -89,7 +88,7 @@ const Inputs = () => {
 
     const setRatioAmount = useCallback(
         (divisor: number) => {
-            setValue('setMaxOutputId', undefined);
+            setValue('setMaxOutputId', undefined, { shouldDirty: true });
             const amount = tokenData
                 ? new BigNumber(tokenData.balance || '0')
                       .dividedBy(divisor)
@@ -99,7 +98,7 @@ const Inputs = () => {
                       .dividedBy(divisor)
                       .decimalPlaces(network.decimals)
                       .toString();
-            setValue(CRYPTO_INPUT, amount);
+            setValue(CRYPTO_INPUT, amount, { shouldDirty: true });
             updateFiatValue(amount);
             clearErrors([FIAT_INPUT, CRYPTO_INPUT]);
             composeRequest();
@@ -116,7 +115,7 @@ const Inputs = () => {
     );
 
     const setAllAmount = useCallback(() => {
-        setValue('setMaxOutputId', 0);
+        setValue('setMaxOutputId', 0, { shouldDirty: true });
         clearErrors([FIAT_INPUT, CRYPTO_INPUT]);
         composeRequest();
     }, [clearErrors, composeRequest, setValue]);
@@ -157,11 +156,13 @@ const Inputs = () => {
                 </RightWrapper>
             </Top>
             {isXLargeLayoutSize && (
-                <FractionButtons
-                    disabled={isBalanceZero}
-                    onFractionClick={setRatioAmount}
-                    onAllClick={setAllAmount}
-                />
+                <LeftWrapper>
+                    <FractionButtons
+                        disabled={isBalanceZero}
+                        onFractionClick={setRatioAmount}
+                        onAllClick={setAllAmount}
+                    />
+                </LeftWrapper>
             )}
         </Wrapper>
     );

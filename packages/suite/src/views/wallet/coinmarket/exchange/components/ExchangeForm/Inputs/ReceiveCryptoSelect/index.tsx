@@ -1,4 +1,4 @@
-import { variables, Select } from '@trezor/components';
+import { variables, Select, Button } from '@trezor/components';
 import { ExchangeInfo } from '@wallet-actions/coinmarketExchangeActions';
 import React from 'react';
 import { Controller } from 'react-hook-form';
@@ -10,6 +10,7 @@ import { Account } from '@wallet-types';
 import invityAPI from '@suite-services/invityAPI';
 import { CRYPTO_TOKEN } from '@wallet-types/coinmarketExchangeForm';
 import { symbolToInvityApiSymbol } from '@suite/utils/wallet/coinmarket/coinmarketUtils';
+import { useLayoutSize } from '@suite-hooks';
 
 const Wrapper = styled.div`
     display: flex;
@@ -40,6 +41,10 @@ const OptionName = styled.div`
 
 const OptionLabel = styled.div`
     min-width: 70px;
+`;
+
+const ClearFormButton = styled(Button)`
+    height: 24px;
 `;
 
 const buildOptions = (
@@ -115,8 +120,11 @@ const ReceiveCryptoSelect = () => {
         exchangeCoinInfo,
         account,
         getValues,
+        formState,
+        isDraft,
+        handleClearFormButtonClick,
     } = useCoinmarketExchangeFormContext();
-
+    const { isDirty } = formState;
     const customSearch = (
         option: { data: { label: string; value: string; name: string } },
         searchText: string,
@@ -132,15 +140,27 @@ const ReceiveCryptoSelect = () => {
 
     const tokenAddress = getValues(CRYPTO_TOKEN);
     const tokenData = account.tokens?.find(t => t.address === tokenAddress);
+    const { layoutSize } = useLayoutSize();
+    const isXLargeLayoutSize = layoutSize === 'XLARGE';
 
     return (
         <Wrapper>
             <Controller
                 control={control}
-                defaultValue={false}
                 name="receiveCryptoSelect"
                 render={({ onChange, value }) => (
                     <Select
+                        labelAddon={
+                            isXLargeLayoutSize && (isDirty || isDraft) ? (
+                                <ClearFormButton
+                                    type="button"
+                                    variant="tertiary"
+                                    onClick={handleClearFormButtonClick}
+                                >
+                                    <Translation id="TR_CLEAR_ALL" />
+                                </ClearFormButton>
+                            ) : undefined
+                        }
                         onChange={(selected: any) => {
                             onChange(selected);
                             setAmountLimits(undefined);
@@ -155,7 +175,7 @@ const ReceiveCryptoSelect = () => {
                             tokenData?.symbol,
                         )}
                         minWidth="70px"
-                        noTopLabel
+                        noTopLabel={!isXLargeLayoutSize}
                         formatOptionLabel={(option: any) => (
                             <Option>
                                 <CoinLogo

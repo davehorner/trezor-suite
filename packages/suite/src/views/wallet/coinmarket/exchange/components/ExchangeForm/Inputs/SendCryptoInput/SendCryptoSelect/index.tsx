@@ -74,6 +74,7 @@ const SendCryptoSelect = () => {
                     minWidth="100px"
                     isClean
                     hideTextCursor
+                    noTopLabel
                 />
             )}
         />

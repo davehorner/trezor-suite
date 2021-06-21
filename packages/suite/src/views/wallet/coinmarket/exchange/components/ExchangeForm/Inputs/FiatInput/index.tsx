@@ -45,7 +45,6 @@ const FiatInput = () => {
             }}
             state={error ? 'error' : undefined}
             name={FIAT_INPUT}
-            noTopLabel
             maxLength={MAX_LENGTH.AMOUNT}
             innerRef={register({
                 validate: (value: any) => {

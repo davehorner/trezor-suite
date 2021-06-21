@@ -15,6 +15,12 @@ const Wrapper = styled.div`
     flex-direction: column;
 `;
 
+const Row = styled.div`
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+`;
+
 const Top = styled.div`
     display: flex;
     flex: 1;
@@ -38,7 +44,6 @@ const Right = styled.div`
 const Middle = styled.div`
     display: flex;
     min-width: 65px;
-    height: 48px;
     align-items: center;
     justify-content: center;
 
@@ -91,7 +96,7 @@ const Inputs = () => {
                 .dividedBy(divisor)
                 .decimalPlaces(network.decimals)
                 .toString();
-            setValue(CRYPTO_INPUT, amount);
+            setValue(CRYPTO_INPUT, amount, { shouldDirty: true });
             clearErrors([CRYPTO_INPUT]);
             setActiveInput(CRYPTO_INPUT);
             onCryptoAmountChange(amount);
@@ -100,8 +105,8 @@ const Inputs = () => {
     );
 
     const setAllAmount = useCallback(() => {
-        setValue('setMaxOutputId', 0);
-        setValue(FIAT_INPUT, '');
+        setValue('setMaxOutputId', 0, { shouldDirty: true });
+        setValue(FIAT_INPUT, '', { shouldDirty: true });
         clearErrors([FIAT_INPUT, CRYPTO_INPUT]);
         setActiveInput(CRYPTO_INPUT);
         composeRequest(CRYPTO_INPUT);
@@ -110,34 +115,39 @@ const Inputs = () => {
     const isBalanceZero = new BigNumber(account.formattedBalance).isZero();
 
     return (
-        <Wrapper>
-            <Top>
-                <Left>
-                    <CryptoInput activeInput={activeInput} setActiveInput={setActiveInput} />
-                </Left>
-                <Middle>
-                    {!isLargeLayoutSize && (
-                        <FractionButtons
-                            disabled={isBalanceZero}
-                            onFractionClick={setRatioAmount}
-                            onAllClick={setAllAmount}
-                        />
-                    )}
-                    <StyledIcon icon="TRANSFER" size={16} />
-                    {!isLargeLayoutSize && <EmptyDiv />}
-                </Middle>
-                <Right>
-                    <FiatInput activeInput={activeInput} setActiveInput={setActiveInput} />
-                </Right>
-            </Top>
+        <>
+            <Wrapper>
+                <Top>
+                    <Left>
+                        <CryptoInput activeInput={activeInput} setActiveInput={setActiveInput} />
+                    </Left>
+                    <Middle>
+                        {!isLargeLayoutSize && (
+                            <FractionButtons
+                                disabled={isBalanceZero}
+                                onFractionClick={setRatioAmount}
+                                onAllClick={setAllAmount}
+                            />
+                        )}
+                        <StyledIcon icon="TRANSFER" size={16} />
+                        {!isLargeLayoutSize && <EmptyDiv />}
+                    </Middle>
+                    <Right>
+                        <FiatInput activeInput={activeInput} setActiveInput={setActiveInput} />
+                    </Right>
+                </Top>
+            </Wrapper>
+
             {isLargeLayoutSize && (
-                <FractionButtons
-                    disabled={isBalanceZero}
-                    onFractionClick={setRatioAmount}
-                    onAllClick={setAllAmount}
-                />
+                <Row>
+                    <FractionButtons
+                        disabled={isBalanceZero}
+                        onFractionClick={setRatioAmount}
+                        onAllClick={setAllAmount}
+                    />
+                </Row>
             )}
-        </Wrapper>
+        </>
     );
 };
 

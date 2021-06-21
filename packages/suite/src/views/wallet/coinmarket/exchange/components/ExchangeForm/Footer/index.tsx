@@ -1,14 +1,18 @@
 import React from 'react';
-import { Button } from '@trezor/components';
+import { Button, variables } from '@trezor/components';
 import { Translation } from '@suite-components';
 import styled from 'styled-components';
 import { useCoinmarketExchangeFormContext } from '@wallet-hooks/useCoinmarketExchangeForm';
 import { CRYPTO_INPUT } from '@suite/types/wallet/coinmarketExchangeForm';
+import { useLayoutSize } from '@suite-hooks';
 
 const Wrapper = styled.div`
     display: flex;
     align-items: center;
     padding-top: 40px;
+    @media screen and (max-width: ${variables.SCREEN_SIZE.XL}) {
+        flex-direction: column;
+    }
 `;
 
 const Center = styled.div`
@@ -22,11 +26,26 @@ const StyledButton = styled(Button)`
     margin-left: 20px;
 `;
 
+const ClearFormButton = styled(Button)`
+    align-self: center;
+    height: 24px;
+    margin-top: 18px;
+`;
+
 const Footer = () => {
-    const { formState, watch, errors, isComposing } = useCoinmarketExchangeFormContext();
+    const {
+        formState,
+        watch,
+        errors,
+        isComposing,
+        isDraft,
+        handleClearFormButtonClick,
+    } = useCoinmarketExchangeFormContext();
+    const { isDirty } = formState;
     const hasValues = !!watch(CRYPTO_INPUT) && !!watch('receiveCryptoSelect')?.value;
     const formIsValid = Object.keys(errors).length === 0;
-
+    const { layoutSize } = useLayoutSize();
+    const isXLargeLayoutSize = layoutSize === 'XLARGE';
     return (
         <Wrapper>
             <Center>
@@ -38,6 +57,17 @@ const Footer = () => {
                     <Translation id="TR_EXCHANGE_SHOW_OFFERS" />
                 </StyledButton>
             </Center>
+            {!isXLargeLayoutSize && (isDirty || isDraft) && (
+                <Center>
+                    <ClearFormButton
+                        type="button"
+                        variant="tertiary"
+                        onClick={handleClearFormButtonClick}
+                    >
+                        <Translation id="TR_CLEAR_ALL" />
+                    </ClearFormButton>
+                </Center>
+            )}
         </Wrapper>
     );
 };

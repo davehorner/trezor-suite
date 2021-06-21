@@ -58,7 +58,6 @@ const CryptoInput = ({ activeInput, setActiveInput }: Props) => {
             defaultValue=""
             state={errors[CRYPTO_INPUT] ? 'error' : undefined}
             name={CRYPTO_INPUT}
-            noTopLabel
             maxLength={MAX_LENGTH.AMOUNT}
             innerRef={register({
                 validate: (value: string) => {
@@ -135,6 +134,7 @@ const CryptoInput = ({ activeInput, setActiveInput }: Props) => {
                             hideTextCursor
                             isDropdownVisible={false}
                             isDisabled
+                            noTopLabel
                             minWidth="85px"
                             formatOptionLabel={(option: any) => (
                                 <Option>

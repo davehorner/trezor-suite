@@ -7,6 +7,7 @@ import { Translation } from '@suite-components';
 import { Controller } from 'react-hook-form';
 import styled from 'styled-components';
 import { CountryOption } from '@wallet-types/coinmarketCommonTypes';
+import { useLayoutSize } from '@suite-hooks';
 
 const Wrapper = styled.div`
     display: flex;
@@ -74,6 +75,16 @@ const StyledSelect = styled(Select)`
     width: max-content;
 `;
 
+const ClearFormButton = styled(Button)`
+    height: 24px;
+`;
+
+const ClearFormButtonWrapper = styled.div`
+    margin-top: 18px;
+    display: flex;
+    justify-content: center;
+`;
+
 const Footer = () => {
     const {
         errors,
@@ -84,74 +95,92 @@ const Footer = () => {
         defaultCountry,
         quotesRequest,
         isComposing,
+        isDraft,
+        handleClearFormButtonClick,
     } = useCoinmarketSellFormContext();
     const countrySelect = 'countrySelect';
     const hasValues =
         (watch('fiatInput') || watch('cryptoInput')) && !!watch('fiatCurrencySelect').value;
     // used instead of formState.isValid, which is sometimes returning false even if there are no errors
     const formIsValid = Object.keys(errors).length === 0;
+    const { layoutSize } = useLayoutSize();
+    const isNotLargeLayoutSize = layoutSize !== 'XLARGE' && layoutSize !== 'LARGE';
+    const { isDirty } = formState;
 
     return (
-        <Wrapper>
-            <Left>
-                <Label>
-                    <Translation id="TR_SELL_OFFERS_FOR" />
-                </Label>
-                <Controller
-                    control={control}
-                    defaultValue={
-                        quotesRequest?.country
-                            ? {
-                                  label: regional.countriesMap.get(quotesRequest.country),
-                                  value: quotesRequest.country,
-                              }
-                            : defaultCountry
-                    }
-                    name={countrySelect}
-                    render={({ onChange, value }) => (
-                        <StyledSelect
-                            noTopLabel
-                            isDropdownVisible
-                            isHovered
-                            options={regional.countriesOptions}
-                            isSearchable
-                            value={value}
-                            formatOptionLabel={(option: CountryOption) => {
-                                const labelParts = getCountryLabelParts(option.label);
-                                if (!labelParts) return null;
+        <>
+            <Wrapper>
+                <Left>
+                    <Label>
+                        <Translation id="TR_SELL_OFFERS_FOR" />
+                    </Label>
+                    <Controller
+                        control={control}
+                        defaultValue={
+                            quotesRequest?.country
+                                ? {
+                                      label: regional.countriesMap.get(quotesRequest.country),
+                                      value: quotesRequest.country,
+                                  }
+                                : defaultCountry
+                        }
+                        name={countrySelect}
+                        render={({ onChange, value }) => (
+                            <StyledSelect
+                                noTopLabel
+                                isDropdownVisible
+                                isHovered
+                                options={regional.countriesOptions}
+                                isSearchable
+                                value={value}
+                                formatOptionLabel={(option: CountryOption) => {
+                                    const labelParts = getCountryLabelParts(option.label);
+                                    if (!labelParts) return null;
 
-                                return (
-                                    <OptionLabel>
-                                        <FlagWrapper>
-                                            <Flag country={option.value} />
-                                        </FlagWrapper>
-                                        <LabelText>{labelParts.text}</LabelText>
-                                    </OptionLabel>
-                                );
-                            }}
-                            isClearable={false}
-                            minWidth="160px"
-                            isClean
-                            hideTextCursor
-                            onChange={(selected: any) => {
-                                onChange(selected);
-                                setAmountLimits(undefined);
-                            }}
-                            maxSearchLength={12}
-                        />
-                    )}
-                />
-            </Left>
-            <Right>
-                <StyledButton
-                    isDisabled={!(formIsValid && hasValues) || formState.isSubmitting}
-                    isLoading={formState.isSubmitting || isComposing}
-                    type="submit"
-                >
-                    <Translation id="TR_SELL_SHOW_OFFERS" />
-                </StyledButton>
-            </Right>
-        </Wrapper>
+                                    return (
+                                        <OptionLabel>
+                                            <FlagWrapper>
+                                                <Flag country={option.value} />
+                                            </FlagWrapper>
+                                            <LabelText>{labelParts.text}</LabelText>
+                                        </OptionLabel>
+                                    );
+                                }}
+                                isClearable={false}
+                                minWidth="160px"
+                                isClean
+                                hideTextCursor
+                                onChange={(selected: any) => {
+                                    onChange(selected);
+                                    setAmountLimits(undefined);
+                                }}
+                                maxSearchLength={12}
+                            />
+                        )}
+                    />
+                </Left>
+                <Right>
+                    <StyledButton
+                        isDisabled={!(formIsValid && hasValues) || formState.isSubmitting}
+                        isLoading={formState.isSubmitting || isComposing}
+                        type="submit"
+                    >
+                        <Translation id="TR_SELL_SHOW_OFFERS" />
+                    </StyledButton>
+                </Right>
+            </Wrapper>
+            {isNotLargeLayoutSize && (isDirty || isDraft) && (
+                <ClearFormButtonWrapper>
+                    <ClearFormButton
+                        type="button"
+                        variant="tertiary"
+                        onClick={handleClearFormButtonClick}
+                    >
+                        <Translation id="TR_CLEAR_ALL" />
+                    </ClearFormButton>
+                </ClearFormButtonWrapper>
+            )}
+        </>
     );
 };
 
