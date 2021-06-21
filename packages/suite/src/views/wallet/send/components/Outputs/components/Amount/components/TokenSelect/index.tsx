@@ -83,6 +83,7 @@ const TokenSelect = ({ output, outputId }: Props) => {
                     isClearable={false}
                     minWidth="58px"
                     isClean
+                    noTopLabel
                     onChange={(selected: Option) => {
                         // change selected value
                         onChange(selected.value);

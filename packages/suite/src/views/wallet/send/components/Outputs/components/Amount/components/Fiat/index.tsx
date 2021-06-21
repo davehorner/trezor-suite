@@ -147,6 +147,7 @@ const Fiat = ({ output, outputId }: Props) => {
                                 isClearable={false}
                                 isSearchable
                                 hideTextCursor
+                                noTopLabel
                                 minWidth="58px"
                                 isClean
                                 data-test={currencyInputName}

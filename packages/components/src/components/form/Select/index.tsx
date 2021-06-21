@@ -163,8 +163,20 @@ const Wrapper = styled.div<Props>`
     }
 `;
 
-const Label = styled.span`
+const Label = styled.div`
+    display: flex;
     min-height: 32px;
+    justify-content: space-between;
+`;
+
+const Left = styled.div`
+    font-size: ${variables.FONT_SIZE.NORMAL};
+    font-weight: ${variables.FONT_WEIGHT.MEDIUM};
+    color: ${props => props.theme.TYPE_DARK_GREY};
+`;
+
+const Right = styled.div`
+    display: flex;
 `;
 
 interface Option {
@@ -188,6 +200,7 @@ interface CommonProps extends Omit<SelectProps, 'components' | 'isSearchable'> {
     minWidth?: string;
     borderWidth?: number;
     borderRadius?: number;
+    labelAddon?: React.ReactElement;
 }
 
 // Make sure isSearchable can't be defined if useKeyPressScroll===true
@@ -213,6 +226,7 @@ const Select = ({
     minWidth = 'initial',
     borderWidth = 2,
     borderRadius = 4,
+    labelAddon,
     ...props
 }: Props) => {
     const selectRef: React.RefObject<ReactSelect<Option>> | null | undefined = useRef(null);
@@ -368,7 +382,12 @@ const Select = ({
 
     return (
         <Wrapper className={className} width={width} isClean={isClean} {...wrapperProps}>
-            {!noTopLabel && <Label>{label}</Label>}
+            {!noTopLabel && (
+                <Label>
+                    <Left>{label}</Left>
+                    <Right>{labelAddon}</Right>
+                </Label>
+            )}
             <ReactSelect
                 ref={selectRef}
                 onKeyDown={onKeyDown}
