@@ -184,7 +184,6 @@ export const getInfo = ({ features, releases }: GetInfoProps) => {
 
 interface GetBinaryProps extends GetInfoProps {
     baseUrl: string;
-    baseUrlBeta: string;
     btcOnly?: boolean;
     version?: Release['version'];
     intermediary?: boolean;
@@ -200,7 +199,6 @@ export const getBinary = async ({
     features,
     releases,
     baseUrl,
-    baseUrlBeta,
     version,
     btcOnly,
     intermediary = false,
@@ -233,9 +231,8 @@ export const getBinary = async ({
             'version provided as param does not match firmware version found by features in bootloader'
         );
     }
-    const url = releaseByFirmware.channel === 'beta' ? baseUrlBeta : baseUrl;
     const fw = await fetchFirmware(
-        `${url}/${btcOnly ? releaseByFirmware.url_bitcoinonly : releaseByFirmware.url}`
+        `${baseUrl}/${btcOnly ? releaseByFirmware.url_bitcoinonly : releaseByFirmware.url}`
     );
     return {
         ...infoByBootloader,
