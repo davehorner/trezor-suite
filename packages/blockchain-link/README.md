@@ -57,3 +57,27 @@ Workers are already built and minified inside `@trezor/blockchain-link/build/` d
 Set your project to compile and provide those workers into blockchain-link instance.
 A webpack configuration example using `worker-loader` can be found [here](./webpack/dev.babel.js).
 
+### Publishing
+
+#### Prerequisites
+
+1. Make sure you have a npm account with write access to `@trezor/blockchain-link` package.
+1. Update CHANGELOG.md and list all changes since the last release.
+1. Bump the version in `packages/blockchain-link/package.json`. Use the [semver](https://semver.org/) convention.
+
+#### Production
+
+1. `cd packages/blockchain-link` cd into the root of `blockchain-link` package.
+1. `yarn build:lib` Build the library.
+1. `npm publish` Publish!
+
+#### Beta
+
+If you want to publish to npm as `beta` (from any branch) do the following:
+
+1. `cd packages/blockchain-link` cd into the root of `blockchain-link` package.
+1. Change the version in `packages/blockchain-link/package.json` from `X.X.X` to `X.X.(X + 1)-beta.1`.
+    The `-beta.<n>` suffix is important because NPM registry doesn't allow overriding already published versions.
+    With this suffix we can publish multiple beta versions for a single patch.
+1. `yarn build:lib` Build the library.
+1. `npm publish --tag beta` Publish!
