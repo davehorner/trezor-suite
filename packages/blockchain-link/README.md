@@ -33,6 +33,20 @@ try {
 
 For complete API see the methods of `BlockchainLink` class in [index.ts](./src/index.ts).
 
+### Workers
+
+Minified workers built for various environments are available in subdirectories of `@trezor/blockchain-link/build/`.
+
+- `module`: Workers wrapped by primitive self-written [webpack plugin](https://github.com/trezor/trezor-suite/blob/develop/packages/blockchain-link/webpack/module-worker-loader.js) into javascript module which can be used as regular module on the main thread. Useful in environments where `Worker` API is not available like `react-native`. See this [webpack config](https://github.com/trezor/trezor-suite/blob/develop/packages/blockchain-link/webpack/workers.module.babel.js) for example integration.
+- `web`: Workers for browser based environments. See this [webpack config](https://github.com/trezor/trezor-suite/blob/develop/packages/blockchain-link/webpack/workers.web.babel.js).
+- `node`: Workers for node based environments. See this [webpack config](https://github.com/trezor/trezor-suite/blob/develop/packages/blockchain-link/webpack/workers.node.babel.js).
+
+All workers can be also built from source. For example using webpack `worker-loader`:
+
+```
+import BlockbookWorker from 'worker-loader?filename=workers/blockbook-worker.[hash].js!@trezor/blockchain-link/lib/workers/blockbook/index.js';
+```
+
 ## Development
 
 This package provides a simple testing UI for playing around with various implementations and BEs. Run it with
@@ -49,13 +63,6 @@ yarn lint
 yarn test
 yarn build
 ```
-
-### Workers compilation
-
-Workers are already built and minified inside `@trezor/blockchain-link/build/` directory.
-
-Set your project to compile and provide those workers into blockchain-link instance.
-A webpack configuration example using `worker-loader` can be found [here](./webpack/dev.babel.js).
 
 ### Publishing
 
