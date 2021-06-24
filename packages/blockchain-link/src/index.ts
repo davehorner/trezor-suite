@@ -143,7 +143,7 @@ class BlockchainLink extends EventEmitter {
     /**
      * Get info about a given transaction.
      * Return value of this method is not identical across networks.
-     * this method exposes the specific transaction format.
+     * this method exposes raw response from the BE.
      */
     getTransaction(
         payload: MessageTypes.GetTransaction['payload']
