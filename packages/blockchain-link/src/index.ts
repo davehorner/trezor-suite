@@ -211,7 +211,7 @@ class BlockchainLink extends EventEmitter {
      * - blockchain i.e new blocks mined.
      * - accounts, addresses i.e. new transactions broadcasted or mined.
      * - fiatRates
-     * - connection to BE (HANDSHAKE, CONNECT, DISCONNECT)
+     * - connection to BE (CONNECT, DISCONNECT)
      *
      * Handling subscription state is left to the user. Hence the purpose of CONNECT and DISCONNECT notifications.
      */
