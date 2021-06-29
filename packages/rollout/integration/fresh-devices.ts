@@ -14,6 +14,8 @@ const RELEASES_T2 = JSON.parse(process.env.RELEASES_T2) as Release[];
 const RELEASES_T1 = JSON.parse(process.env.RELEASES_T1) as Release[];
 const BASE_URL = process.env.BASE_FW_URL;
 const BETA_BASE_URL = process.env.BETA_BASE_FW_URL;
+// Tests are expected to fail whenever there is a new firmware update, since the last version is hardcoded.s
+const latestVersion = [1, 10, 1] as VersionArray;
 
 describe('Find firmware info for: ', () => {
     it('bootloader 1.0.0 -> firmware version 1.6.3', async () => {
@@ -27,7 +29,11 @@ describe('Find firmware info for: ', () => {
             }),
             releases: RELEASES_T1,
         });
-        expect(info).toMatchObject({ release: { version: [1, 6, 3] } });
+        expect(info).toMatchObject({
+            release: { version: latestVersion },
+            latestSafe: { version: [1, 6, 3] },
+            isSafe: false,
+        });
 
         // validate that with binary returns the same firmware
         const withBinary = await getBinary({
@@ -43,12 +49,13 @@ describe('Find firmware info for: ', () => {
             baseUrl: BASE_URL,
             baseUrlBeta: BETA_BASE_URL,
         });
-        expect(withBinary).toMatchObject({ release: { version: [1, 6, 3] } });
+        expect(withBinary).toMatchObject({
+            release: { version: latestVersion },
+            latestSafe: { version: [1, 6, 3] },
+        });
     });
 
     it('bootloader 1.5.1 -> firmware version 1.10.0', async () => {
-        // currently, this is expected to fail after there is new firmware update, since the last version is hardcoded
-        const targetVersion = [1, 10, 1] as VersionArray;
         const info = getInfo({
             features: getDeviceFeatures({
                 bootloader_mode: true,
@@ -59,7 +66,7 @@ describe('Find firmware info for: ', () => {
             }),
             releases: RELEASES_T1,
         });
-        expect(info).toMatchObject({ release: { version: targetVersion } });
+        expect(info).toMatchObject({ release: { version: latestVersion } });
 
         // validate that with binary returns the same firmware
         const withBinary = await getBinary({
@@ -70,11 +77,11 @@ describe('Find firmware info for: ', () => {
                 patch_version: 1,
                 firmware_present: false,
             }),
-            version: targetVersion,
+            version: latestVersion,
             releases: RELEASES_T1,
             baseUrl: BASE_URL,
             baseUrlBeta: BETA_BASE_URL,
         });
-        expect(withBinary).toMatchObject({ release: { version: targetVersion } });
+        expect(withBinary).toMatchObject({ release: { version: latestVersion } });
     });
 });

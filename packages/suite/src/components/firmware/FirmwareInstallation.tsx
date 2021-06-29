@@ -99,7 +99,7 @@ const FirmwareInstallation = ({ cachedDevice, standaloneFwUpdate }: Props) => {
                 nested={!!standaloneFwUpdate}
                 disableConfirmWrapper={!!standaloneFwUpdate}
             >
-                {cachedDevice?.firmwareRelease?.isLatest && (
+                {cachedDevice?.firmwareRelease?.isSafe && (
                     // If the proposed fw update is not latest it means we are gonna install intermediary firmware.
                     // firmwareRelease will be set to newest release supported by the bootloader. It is fw 1.6.1 for bootloader version 1.4.0,
                     // which is not the latest fw that will be installed as a subsequent fw update after installation of intermediary fw

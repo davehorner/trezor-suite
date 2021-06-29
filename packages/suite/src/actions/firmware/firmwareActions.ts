@@ -70,7 +70,7 @@ export const firmwareUpdate = () => async (dispatch: Dispatch, getState: GetStat
     // update to same variant as is currently installed or to the regular one if device does not have any fw (new/wiped device)
     const isBtcOnlyFirmware = !prevDevice ? false : isBitcoinOnly(prevDevice);
 
-    const intermediary = !toRelease.isLatest;
+    const intermediary = !toRelease.isSafe;
     if (intermediary) {
         console.warn('Cannot install latest firmware. Will install intermediary fw instead.');
     } else {

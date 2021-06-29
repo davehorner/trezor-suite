@@ -67,7 +67,7 @@ const FirmwareInitial = ({ cachedDevice, setCachedDevice, standaloneFwUpdate }: 
         content = {
             heading: <Translation id="TR_INSTALL_FIRMWARE" />,
             description: <Translation id="TR_FIRMWARE_SUBHEADING" />,
-            body: cachedDevice?.firmwareRelease?.isLatest ? (
+            body: cachedDevice?.firmwareRelease?.isSafe ? (
                 <FirmwareOffer
                     newVersion={getFwUpdateVersion(cachedDevice)}
                     releaseChangelog={cachedDevice.firmwareRelease}
@@ -92,7 +92,7 @@ const FirmwareInitial = ({ cachedDevice, setCachedDevice, standaloneFwUpdate }: 
                     id={getDescription(
                         device.firmware === 'required',
                         !!standaloneFwUpdate,
-                        !!device.firmwareRelease?.isLatest,
+                        !!device.firmwareRelease?.isSafe,
                     )}
                 />
             ),
