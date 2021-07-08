@@ -615,6 +615,26 @@ const Settings = () => {
                         </ActionButton>
                     </ActionColumn>
                 </SectionItem>
+                <SectionItem>
+                    <TextColumn
+                        title={<Translation id="TR_DEVICE_SETTINGS_CUSTOM_FIRMWARE_TITLE" />}
+                        description={
+                            <Translation id="TR_DEVICE_SETTINGS_CUSTOM_FIRMWARE_DESCRIPTION" />
+                        }
+                    />
+                    <ActionColumn>
+                        <ActionButton
+                            onClick={() => {
+                                goto('firmware-custom', { cancelable: true });
+                            }}
+                            variant="danger"
+                            isDisabled={isDeviceLocked}
+                            data-test="@settings/device/custom-firmware-modal-button"
+                        >
+                            <Translation id="TR_DEVICE_SETTINGS_CUSTOM_FIRMWARE_BUTTON" />
+                        </ActionButton>
+                    </ActionColumn>
+                </SectionItem>
             </Section>
         </SettingsLayout>
     );
