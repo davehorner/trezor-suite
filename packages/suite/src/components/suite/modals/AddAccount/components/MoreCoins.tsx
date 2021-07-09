@@ -46,8 +46,8 @@ const triggerAnimation = {
 const BackgroundWrapper = styled.div<{ isExpanded: boolean }>`
     background-color: ${({ theme }) => theme.BG_GREY};
     border-radius: ${({ isExpanded }) => (isExpanded ? 10 : 57)}px;
-    transition: border-radius ${animationDuration}s ease-in-out;
-    padding: 16px;
+    transition: all ${animationDuration}s ease-in-out;
+    padding: ${({ isExpanded }) => (isExpanded ? '16px' : '10px 16px')};
     margin-right: auto;
 `;
 
