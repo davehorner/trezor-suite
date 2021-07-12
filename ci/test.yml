@@ -27,6 +27,7 @@
   after_script:
     - docker-compose down
     - docker network prune -f
+    - ls -la
   artifacts:
     expire_in: 7 days
     when: always
