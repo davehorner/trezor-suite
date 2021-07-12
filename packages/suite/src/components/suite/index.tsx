@@ -47,7 +47,7 @@ import CollapsibleBox from './CollapsibleBox';
 import DeviceMatrixExplanation from './DeviceMatrixExplanation';
 import TroubleshootingTips from './TroubleshootingTips';
 import ConnectDevicePrompt from './ConnectDevicePrompt';
-import Coin, { CoinProps } from './Coin';
+import Coin from './Coin';
 import CoinsGroup from './CoinsGroup';
 import CoinsList from './CoinsGroup/CoinsList';
 
@@ -109,4 +109,4 @@ export {
     CoinsGroup,
     CoinsList,
 };
-export type { ImageProps, ModalProps, CoinProps };
+export type { ImageProps, ModalProps };

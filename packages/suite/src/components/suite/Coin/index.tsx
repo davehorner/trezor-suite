@@ -114,4 +114,3 @@ const Coin = ({ symbol, name, label, selected = false, disabled = false, ...prop
 };
 
 export default Coin;
-export type { Props as CoinProps };
