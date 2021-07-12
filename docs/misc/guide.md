@@ -4,6 +4,10 @@ Guide is a feature that allows us to write content on various topics like basics
 
 See the [tech spec](../specs/guide.md) for details and rationale behind the implementation.
 
+## How to update
+
+Change `GITBOOK_REVISION` constant in `packages/suite-data/src/guide/constants.ts`. Example: [40855097](https://github.com/trezor/trezor-suite/commit/408550979cd58e78df297e30fb32e45935529a80). That's it.
+
 ## Content
 
 The content is maintained in a [GitBook project](https://app.gitbook.com/@trezor/s/suite-product-guide/). (You'll need an account with appropriate privileges to access it.) GitBook mirrors the content to a [GitHub repository](https://github.com/trezor/trezor-suite-guide) from where it's fetched when Suite builds. The fetch happens in the `suite-data` package on `build:lib` yarn task. Once fetched the content is indexed and transformed to form usable in the Suite app. This form is then copied into the static directories of web, desktop and native builds.
