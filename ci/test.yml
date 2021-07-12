@@ -36,6 +36,7 @@
       - ./packages/integration-tests/projects/suite-web/screenshots
       - ./packages/integration-tests/projects/suite-web/videos
       - download-snapshots.sh
+      - debugging.log
 
 e2e web suite:
   extends: .e2e web
