@@ -5,7 +5,7 @@ import { UnavailableCapability } from 'trezor-connect';
 import { Network } from '@wallet-types';
 import { TrezorDevice, ExtendedMessageDescriptor } from '@suite-types';
 import { Coin, Translation } from '@suite-components';
-import { isBitcoinOnly } from '@suite-utils/device';
+import { getDeviceModel, isBitcoinOnly } from '@suite-utils/device';
 import { useDevice } from '@suite-hooks';
 
 const Wrapper = styled.div`
@@ -19,11 +19,11 @@ interface UnavailableMessageProps {
     device: TrezorDevice;
 }
 const unavailabilityReason = ({ whyDisabled, device }: UnavailableMessageProps) => {
-    const deviceVersion = device.features?.major_version === 1 ? 1 : 2;
+    const deviceModel = getDeviceModel(device);
     const isBtcOnly = isBitcoinOnly(device);
     switch (whyDisabled) {
         case 'no-capability':
-            return deviceVersion === 1 && !isBtcOnly
+            return deviceModel === '1' && !isBtcOnly
                 ? // right know it serves only one purpose - in case of XRP on T1 inform user that the capability is available on TT
                   'FW_CAPABILITY_SUPPORTED_IN_T2'
                 : 'FW_CAPABILITY_NO_CAPABILITY';
