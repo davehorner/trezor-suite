@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { connect } from 'react-redux';
 import { useDiscovery, useAccountSearch } from '@suite-hooks';
-import { H2, variables, useTheme, Icon, scrollbarStyles } from '@trezor/components';
+import { H2, variables, useTheme, Icon } from '@trezor/components';
 import { Translation, AddAccountButton, LayoutContext } from '@suite-components';
 
 import { sortByCoin, getFailedAccounts, accountSearchFn } from '@wallet-utils/accountUtils';
@@ -18,6 +18,10 @@ const Wrapper = styled.div<{ isInline?: boolean }>`
     flex-direction: column;
     z-index: 4; /*  higher than accounts list to prevent box-shadow overflow */
     width: 100%;
+    padding: 0px 8px;
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     ${props =>
         !props.isInline &&
@@ -100,17 +104,6 @@ const ExpandedMobileWrapper = styled.div`
     border-bottom-right-radius: 4px;
     padding: 0px 16px;
     padding-bottom: 16px;
-
-    ${scrollbarStyles}
-`;
-
-const Scroll = styled.div`
-    height: auto;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0px 8px;
-
-    ${scrollbarStyles}
 `;
 
 const NoResults = styled.div`
@@ -151,15 +144,13 @@ const AccountsMenu = ({ device, accounts, selectedAccount }: Props) => {
         // TODO: default empty state while retrieving data from the device
         return (
             <Wrapper isInline={isMenuInline}>
-                <Scroll>
-                    <MenuHeader isInline={isMenuInline}>
-                        <Heading noMargin isInline={isMenuInline}>
-                            <Translation id="TR_MY_ACCOUNTS" />
-                        </Heading>
-                        <AccountSearchBox isMobile={isMenuInline} />
-                    </MenuHeader>
-                    {!isMenuInline && <SkeletonAccountItem />}
-                </Scroll>
+                <MenuHeader isInline={isMenuInline}>
+                    <Heading noMargin isInline={isMenuInline}>
+                        <Translation id="TR_MY_ACCOUNTS" />
+                    </Heading>
+                    <AccountSearchBox isMobile={isMenuInline} />
+                </MenuHeader>
+                {!isMenuInline && <SkeletonAccountItem />}
             </Wrapper>
         );
     }
@@ -295,18 +286,16 @@ const AccountsMenu = ({ device, accounts, selectedAccount }: Props) => {
 
     return (
         <Wrapper>
-            <Scroll>
-                <MenuHeader>
-                    <Row>
-                        <Heading noMargin>
-                            <Translation id="TR_MY_ACCOUNTS" />
-                        </Heading>
-                        <AddAccountButton device={device} noButtonLabel />
-                    </Row>
-                    <AccountSearchBox />
-                </MenuHeader>
-                {accountsComponent}
-            </Scroll>
+            <MenuHeader>
+                <Row>
+                    <Heading noMargin>
+                        <Translation id="TR_MY_ACCOUNTS" />
+                    </Heading>
+                    <AddAccountButton device={device} noButtonLabel />
+                </Row>
+                <AccountSearchBox />
+            </MenuHeader>
+            {accountsComponent}
         </Wrapper>
     );
 };
