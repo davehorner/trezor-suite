@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import { darken } from 'polished';
 import { Translation } from '@suite-components';
 import { OnOffSwitcher } from '@wallet-components';
 import { Button, Tooltip } from '@trezor/components';
 import { useSendFormContext } from '@wallet-hooks';
 import { isEnabled as isFeatureEnabled } from '@suite-utils/features';
+import { useActions } from '@suite-hooks';
+import * as guideActions from '@suite-actions/guideActions';
+import { Node } from '@trezor/suite-data/src/guide/parser';
 
 import Locktime from './components/Locktime';
 
@@ -40,6 +44,17 @@ const StyledButton = styled(Button)`
     margin: 4px 8px 4px 0px;
 `;
 
+const OpenGuideLink = styled.a`
+    margin-left: 3px;
+    color: ${props => props.theme.TYPE_GREEN};
+    transition: ${props =>
+        `background ${props.theme.HOVER_TRANSITION_TIME} ${props.theme.HOVER_TRANSITION_EFFECT}`};
+
+    &:hover {
+        color: ${props => darken(props.theme.HOVER_DARKEN_FILTER, props.theme.TYPE_GREEN)};
+    }
+`;
+
 const BitcoinOptions = () => {
     const {
         network,
@@ -54,6 +69,25 @@ const BitcoinOptions = () => {
     const locktimeEnabled = options.includes('bitcoinLockTime');
     const rbfEnabled = options.includes('bitcoinRBF');
     const broadcastEnabled = options.includes('broadcast');
+
+    const { openNode, openGuide } = useActions({
+        openGuide: guideActions.open,
+        openNode: guideActions.openNode,
+    });
+
+    const tooltipOpensGuide = (id: string) => {
+        const node: Node = {
+            type: 'page',
+            id: '',
+            locales: [''],
+            title: {
+                '': 'string',
+            },
+        };
+        openGuide();
+        node.id = id;
+        openNode(node);
+    };
 
     return (
         <Wrapper>
@@ -74,7 +108,18 @@ const BitcoinOptions = () => {
                 <Left>
                     {!locktimeEnabled && (
                         <Tooltip
-                            content={<Translation id="LOCKTIME_ADD_TOOLTIP" />}
+                            content={
+                                <>
+                                    <Translation id="LOCKTIME_ADD_TOOLTIP" />
+                                    <OpenGuideLink
+                                        onClick={() =>
+                                            tooltipOpensGuide('/suite-basics/send/locktime.md')
+                                        }
+                                    >
+                                        <Translation id="TR_LEARN_MORE" />
+                                    </OpenGuideLink>
+                                </>
+                            }
                             cursor="pointer"
                         >
                             <StyledButton
@@ -93,7 +138,23 @@ const BitcoinOptions = () => {
                     {isFeatureEnabled('RBF') &&
                         network.features?.includes('rbf') &&
                         !locktimeEnabled && (
-                            <Tooltip content={<Translation id="RBF_TOOLTIP" />} cursor="pointer">
+                            <Tooltip
+                                content={
+                                    <>
+                                        <Translation id="RBF_TOOLTIP" />
+                                        <OpenGuideLink
+                                            onClick={() =>
+                                                tooltipOpensGuide(
+                                                    '/suite-basics/send/rbf-replace-by-fee.md',
+                                                )
+                                            }
+                                        >
+                                            <Translation id="TR_LEARN_MORE" />
+                                        </OpenGuideLink>
+                                    </>
+                                }
+                                cursor="pointer"
+                            >
                                 <StyledButton
                                     variant="tertiary"
                                     icon="RBF"
